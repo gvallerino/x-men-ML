@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ar.com.gvallerino</groupId>
-	<artifactId>x-men-ML</artifactId>
+	<artifactId>XmenML</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>x-men-ML</name>
-	<description>X-men project for ML</description>
+	<name>XmenML</name>
+	<description>Xmen Project to Mercado Libre</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
