@@ -1,48 +1,67 @@
 package ar.com.gvallerino.xMenML.entities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DnaAnalyzer {
 	
-	private String[] dna;
-	private int rows;
-	private int columns;
+	private static final Logger LOGGER = LoggerFactory.getLogger(DnaAnalyzer.class);
+	
+	private char[][] matrix;
+	private int longMatrix;
 	private int countLettersDna = 4;
 	
 	public boolean isMutant(String[] dna) {
 		
-		this.dna = dna;
-		this.rows = dna.length;
-		this.columns = dna[0].length();
+		boolean mutantFound = false;
 		
-		if (isSquareRange(dna)) {
-			
-			//TODO: Poner contador de tiempo
-			boolean mutantFound = searchMutant(dna);
+		LOGGER.info("Starting task DNA Analyzer");
+		long time_start = System.currentTimeMillis();
+		matrix = this.loadMatrix(dna);
+		
+		if (isValidMatrix()) {
+			mutantFound = searchMutant(dna);
 		}
 		
-		return false;
+		long time_end = System.currentTimeMillis();
+		LOGGER.info("Completing task DNA Analyzer: " + ( time_end - time_start ) + " milliseconds");
+		return mutantFound;
 	}
 	
-	private boolean isSquareRange(String[] dna) {
+	private char[][] loadMatrix(String[] dna) {
 		
-		if (dna != null && dna.length > 1) {
+		longMatrix = dna.length;
+		char[][]matrix = new char[longMatrix][longMatrix];
+		
+		for (int i = 0; i < longMatrix; i++) {
 			
-			return rows == columns;
+			if (dna[i].length() != longMatrix) return null; //TODO: Lanzar excepcion
+			matrix[i] = dna[i].toCharArray();
 		}
 		
-		//TODO: Tirar excepcion cuando algo falle
-		return false;
+		return matrix;
+	}
+	
+	private boolean isValidMatrix() {
+		
+		return (matrix != null && longMatrix > countLettersDna);
 	}
 	
 	private boolean searchMutant(String[] dna) {
 		
 		int countMutantFound = 0;
 		
-		for (int i = 0; i < columns; i++) {
+		for (int i = 0; i < longMatrix; i++) {
 
 			char[] codeDna = dna[i].toCharArray();
-			for (int j = 0; j < rows; j++) {
+			for (int j = 0; j < longMatrix; j++) {
+				
+				if (j + countLettersDna >= longMatrix) {
+					break;
+				}
 				
 				if (searchSameCode(codeDna, j)) {
+					j += (countLettersDna - 1);
 					countMutantFound++;
 					
 					if (countMutantFound >= 2) {
@@ -56,14 +75,9 @@ public class DnaAnalyzer {
 	
 	private boolean searchSameCode(char[] codeDna, int actualPosition) {
 		
-		//TODO: poner en el for de arriba, para el break
-		if (actualPosition + countLettersDna >= columns) {
-			return false;
-		}
-		
-		for (int i = 0; i < countLettersDna; i++) {
+		for (int i = 0; i < countLettersDna - 1; i++) {
 			
-			if (i >= columns) {
+			if (i >= longMatrix) {
 				//TODO: Tirar excepcion
 				return false;
 			}
@@ -76,7 +90,7 @@ public class DnaAnalyzer {
 			}
 			
 		}
-		
+		//TODO: Verificar que las 4 letras iguales sean (A,T,C,G) y no cualquier otra cosa.
 		return true;
 	}
 

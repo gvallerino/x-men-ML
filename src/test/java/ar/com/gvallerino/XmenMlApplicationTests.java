@@ -17,10 +17,36 @@ public class XmenMlApplicationTests {
 		
 	}
 	
+	//TODO: Calcular el tiempo de corrida de todos los tests juntos
+	
 	@Test
-	public void prueba() {
+	public void testRowWithIncompleteInformationShouldNotBeMutant() {
+		DnaAnalyzer dnaAnalyzer = new DnaAnalyzer();
+		String[] dna = {"ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
+	}
+	
+	@Test
+	public void testColumnWithIncompleteInformationShouldNotBeMutant() {
+		DnaAnalyzer dnaAnalyzer = new DnaAnalyzer();
+		String[] dna = {"ATG","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
+	}
+	
+	@Test
+	public void testOneMatchCodeDnaShouldNotBeMutant() {
 		DnaAnalyzer dnaAnalyzer = new DnaAnalyzer();
 		String[] dna = {"ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
+	}
+	
+	@Test
+	public void testTwoMatchCodeDnaShouldBeMutant() {
+		DnaAnalyzer dnaAnalyzer = new DnaAnalyzer();
+		String[] dna = {"ATGCGA","AAAACC","TTATGT","AGAAGG","CCCCTA","TCACTG"};
 		boolean isMutant = dnaAnalyzer.isMutant(dna);
 		Assert.assertTrue(isMutant);
 	}
