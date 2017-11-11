@@ -24,11 +24,12 @@ public class HorizontalSequenceHandler implements SequenceHandler {
 	public boolean isSequenceMutant(Coordinate currentCoordinate) {
 		
 		int i = currentCoordinate.getX();
+		int upperLimit = currentCoordinate.getY() + countLettersDna - 1;
 		
-		for (int j = currentCoordinate.getY(); j < countLettersDna - 1; j++) {
+		for (int j = currentCoordinate.getY(); j < upperLimit; j++) {
 			
-			if (j >= longMatrix) {
-				//TODO: Tirar excepcion
+			if (j+1 >= longMatrix) {
+				//TODO: Tirar excepcion 
 				return false;
 			}
 			

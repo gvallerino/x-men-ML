@@ -19,6 +19,7 @@ public class XmenMlApplicationTests {
 	
 	//TODO: Calcular el tiempo de corrida de todos los tests juntos
 	
+	// Tests de comprobacion de datos
 	@Test
 	public void testRowWithIncompleteInformationShouldNotBeMutant() {
 		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
@@ -36,9 +37,18 @@ public class XmenMlApplicationTests {
 	}
 	
 	@Test
-	public void testOneDnaIsNotCorrectShouldNotBeMutant() {
+	public void testOneDnaIsIncorrectShouldNotBeMutant() {
 		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
 		String[] dna = {"ATGCGA","AAAACC","TTUTGT","AGAAGG","CCCCTA","TCACTG"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
+	}
+	
+	// Test de matcheo de mutante horizontales
+	@Test
+	public void testOneMatchHorizontalSequenceShouldNotBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"ATGCGA","AATACC","TTATGT","AGAGGG","CCCCTA","TCACTG"};
 		boolean isMutant = dnaAnalyzer.isMutant(dna);
 		Assert.assertFalse(isMutant);
 	}
@@ -52,18 +62,100 @@ public class XmenMlApplicationTests {
 	}
 	
 	@Test
+	public void testOneMatchHorizontalSequenceFiveDnaShouldNotBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"ATGCGA","AAAAAC","TTATGT","AGAGGG","CTCCTA","TCACTG"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
+	}
+	
+	@Test
+	public void testOneMatchHorizontalSequenceInLimitsShouldNotBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"ATAAAA","ACATAC","TTGTGT","AGAAGG","CTCCTA","TCAAAG"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
+	}
+	
+	@Test
+	public void testTwoMatchsHorizontalSequenceInLimitsShouldBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"ATAAAA","ACATAC","TTGTGT","AGAAGG","CTCCTA","TCAAAA"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertTrue(isMutant);
+	}
+	
+	@Test
+	public void testOneMatchHorizontalSequenceCorrelativesShouldBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"AAAAAAAT","TGTGTGTG","CTCTCTCT","CGCGCGCG","ATATATAT","ACACACAC","CACACACA","GAGAGAGA"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
+	}
+	
+	@Test
+	public void testTwoMatchsHorizontalSequenceCorrelativesShouldBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"AAAAAAAA","TGTGTGTG","CTCTCTCT","CGCGCGCG","ATATATAT","ACACACAC","CACACACA","GAGAGAGA"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertTrue(isMutant);
+	}
+	
+	// Test de matcheo de mutante verticales
+	@Test
 	public void testTwoMatchsVerticalSequenceShouldBeMutant() {
 		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
 		String[] dna = {"ATGCGG","AATTCC","ATATGC","AGAAGC","CCCCTC","TCACTC"};
 		boolean isMutant = dnaAnalyzer.isMutant(dna);
 		Assert.assertTrue(isMutant);
 	}
-
+	
 	@Test
-	public void testMatchHorizontalAndOblicuoSequenceShouldBeMutant() {
+	public void testOneMatchVerticalSequenceFiveDnaShouldNotBeMutant() {
 		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
-		String[] dna = {"ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"};
+		String[] dna = {"ATGCGA","ATTAAC","TTATGT","ATAAGG","CTCCTA","TCACTG"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
+	}
+	
+	@Test
+	public void testOneMatchVerticalSequenceInLimitsShouldBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"CTGCGA","CTTAAT","ACATGC","ATAAGC","ATCCTC","ACACTT"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
+	}
+	
+	@Test
+	public void testTwoMatchsVerticalSequenceInLimitsShouldBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"CTGCGA","CTTAAT","ACATGC","ATAAGC","ATCCTC","ACACTC"};
 		boolean isMutant = dnaAnalyzer.isMutant(dna);
 		Assert.assertTrue(isMutant);
+	}
+	
+	@Test
+	public void testOneMatchVerticalSequenceCorrelativesShouldBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"AGACATAT","AGTGTGTG","ATCTCTCT","AGCGCGCG","ATATATAT","ACACACAC","AACACACA","AAGAGAGA"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
+	}
+	
+	@Test
+	public void testTwoMatchsVerticalSequenceCorrelativesShouldBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"AAAAAAAA","TGTGTGTG","CTCTCTCT","CGCGCGCG","ATATATAT","ACACACAC","CACACACA","GAGAGAGA"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertTrue(isMutant);
+	}
+	
+	// Test de matcheo de mutante oblicuos
+	@Test
+	public void testOneMatchObliqueRightSequenceShouldNotBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"ATGCGA","CAGTCC","TTATGT","AGAAGG","CCGCTA","TCACTG"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
 	}
 }

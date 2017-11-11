@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import ar.com.gvallerino.xMenML.entities.Coordinate;
 import ar.com.gvallerino.xMenML.entities.HorizontalSequenceHandler;
-import ar.com.gvallerino.xMenML.entities.ObliqueSequenceHandler;
+import ar.com.gvallerino.xMenML.entities.ObliqueRightSequenceHandler;
 import ar.com.gvallerino.xMenML.entities.VerticalSequenceHandler;
 import ar.com.gvallerino.xMenML.enums.DnaEnum;
 import ar.com.gvallerino.xMenML.interfaces.SequenceHandler;
@@ -20,7 +20,7 @@ public class DnaAnalyzerServiceImpl {
 	
 	private SequenceHandler horizontalHandler;
 	private SequenceHandler verticalHandler;
-	private SequenceHandler obliqueHandler;
+	private SequenceHandler obliqueRightHandler;
 	
 	public boolean isMutant(String[] dna) {
 		LOGGER.info("Starting task DNA Analyzer");
@@ -66,12 +66,10 @@ public class DnaAnalyzerServiceImpl {
 			for (int j = 0; j < longMatrix; j++) {
 				
 				try {
-					Coordinate coordinate = new Coordinate(i, j);
-//					if (j + countLettersDna >= longMatrix) {
-//						break;
-//					}
 					
-					DnaEnum.belongsToDna(Character.toString(matrix[i][j]));
+					Coordinate coordinate = new Coordinate(i, j);
+					char dna = matrix[i][j];
+					DnaEnum.belongsToDna(Character.toString(dna));
 					
 					if (horizontalHandler.verifyCoordinates(coordinate) && horizontalHandler.isSequenceMutant(coordinate)) {
 						horizontalHandler.addCoordinatesWithoutMoving(coordinate);
@@ -83,8 +81,8 @@ public class DnaAnalyzerServiceImpl {
 						countMutantFound++;
 					}
 					
-					if (obliqueHandler.isSequenceMutant(coordinate)) {
-						//j += (countLettersDna - 1);
+					if (obliqueRightHandler.verifyCoordinates(coordinate) && obliqueRightHandler.isSequenceMutant(coordinate)) {
+						obliqueRightHandler.addCoordinatesWithoutMoving(coordinate);
 						countMutantFound++;
 					}
 					
@@ -105,7 +103,7 @@ public class DnaAnalyzerServiceImpl {
 		
 		horizontalHandler = new HorizontalSequenceHandler(matrix, countLettersDna);
 		verticalHandler = new VerticalSequenceHandler(matrix, countLettersDna);
-		obliqueHandler = new ObliqueSequenceHandler(matrix, countLettersDna);
+		obliqueRightHandler = new ObliqueRightSequenceHandler(matrix, countLettersDna);
 	}
 	
 }
