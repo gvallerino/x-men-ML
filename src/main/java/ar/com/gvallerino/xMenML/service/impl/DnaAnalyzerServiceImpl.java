@@ -4,10 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ar.com.gvallerino.xMenML.entities.Coordinate;
-import ar.com.gvallerino.xMenML.entities.HorizontalSequenceAnalyzer;
-import ar.com.gvallerino.xMenML.entities.ObliqueSequenceAnalyzer;
-import ar.com.gvallerino.xMenML.entities.VerticalSequenceAnalyzer;
-import ar.com.gvallerino.xMenML.interfaces.SequenceAnalyzer;
+import ar.com.gvallerino.xMenML.entities.HorizontalSequenceHandler;
+import ar.com.gvallerino.xMenML.entities.ObliqueSequenceHandler;
+import ar.com.gvallerino.xMenML.entities.VerticalSequenceHandler;
+import ar.com.gvallerino.xMenML.enums.DnaEnum;
+import ar.com.gvallerino.xMenML.interfaces.SequenceHandler;
 
 public class DnaAnalyzerServiceImpl {
 	
@@ -17,19 +18,19 @@ public class DnaAnalyzerServiceImpl {
 	private int longMatrix;
 	private int countLettersDna = 4;
 	
-	private SequenceAnalyzer horizontalSequenceAnalyzer;
-	private SequenceAnalyzer verticalSequenceAnalyzer;
-	private SequenceAnalyzer obliqueSequenceAnalyzer;
+	private SequenceHandler horizontalHandler;
+	private SequenceHandler verticalHandler;
+	private SequenceHandler obliqueHandler;
 	
 	public boolean isMutant(String[] dna) {
+		LOGGER.info("Starting task DNA Analyzer");
 		
 		boolean mutantFound = false;
-		
-		LOGGER.info("Starting task DNA Analyzer");
 		long time_start = System.currentTimeMillis();
 		matrix = this.loadMatrix(dna);
 		
 		if (isValidMatrix()) {
+			initializeSequencesAnalyzer();
 			mutantFound = searchMutant();
 		}
 		
@@ -49,10 +50,6 @@ public class DnaAnalyzerServiceImpl {
 			matrix[i] = dna[i].toCharArray();
 		}
 		
-		horizontalSequenceAnalyzer = new HorizontalSequenceAnalyzer(matrix, countLettersDna);
-		verticalSequenceAnalyzer = new VerticalSequenceAnalyzer(matrix, countLettersDna);
-		obliqueSequenceAnalyzer = new ObliqueSequenceAnalyzer(matrix, countLettersDna);
-		
 		return matrix;
 	}
 	
@@ -68,53 +65,47 @@ public class DnaAnalyzerServiceImpl {
 		for (int i = 0; i < longMatrix; i++) {
 			for (int j = 0; j < longMatrix; j++) {
 				
-				Coordinate coordinate = new Coordinate(i, j);
-				if (j + countLettersDna >= longMatrix) {
-					break;
-				}
-				
-				if (horizontalSequenceAnalyzer.isSequenceMutant(coordinate)) {
-					j += (countLettersDna - 1); //Esto estaria mal
-					countMutantFound++;
-				}
-				
-				if (verticalSequenceAnalyzer.isSequenceMutant(coordinate)) {
-					//j += (countLettersDna - 1); //TODO: pensar bien esto
-					countMutantFound++;
-				}
-				
-				if (obliqueSequenceAnalyzer.isSequenceMutant(coordinate)) {
-					//j += (countLettersDna - 1);
-					countMutantFound++;
-				}
-				
-				if (countMutantFound >= 2) {
-					return true;
+				try {
+					Coordinate coordinate = new Coordinate(i, j);
+//					if (j + countLettersDna >= longMatrix) {
+//						break;
+//					}
+					
+					DnaEnum.belongsToDna(Character.toString(matrix[i][j]));
+					
+					if (horizontalHandler.verifyCoordinates(coordinate) && horizontalHandler.isSequenceMutant(coordinate)) {
+						horizontalHandler.addCoordinatesWithoutMoving(coordinate);
+						countMutantFound++;
+					}
+					
+					if (verticalHandler.verifyCoordinates(coordinate) && verticalHandler.isSequenceMutant(coordinate)) {
+						verticalHandler.addCoordinatesWithoutMoving(coordinate);
+						countMutantFound++;
+					}
+					
+					if (obliqueHandler.isSequenceMutant(coordinate)) {
+						//j += (countLettersDna - 1);
+						countMutantFound++;
+					}
+					
+					if (countMutantFound >= 2) {
+						return true;
+					}
+					
+				} catch (IllegalArgumentException iae) {
+					LOGGER.error("Codigo DNA incorrecto", iae);
+					return false;
 				}
 			}
 		}
 		return false;
 	}
 	
-//	private boolean searchSameCode(char[] codeDna, int actualPosition) {
-//		
-//		for (int i = 0; i < countLettersDna - 1; i++) {
-//			
-//			if (i >= longMatrix) {
-//				//TODO: Tirar excepcion
-//				return false;
-//			}
-//			
-//			char dnaSingle = codeDna[i];
-//			char dnaSingleNext = codeDna[i+1];
-//			
-//			if (dnaSingle != dnaSingleNext) {
-//				return false;
-//			}
-//			
-//		}
-//		//TODO: Verificar que las 4 letras iguales sean (A,T,C,G) y no cualquier otra cosa.
-//		return true;
-//	}
-
+	private void initializeSequencesAnalyzer() {
+		
+		horizontalHandler = new HorizontalSequenceHandler(matrix, countLettersDna);
+		verticalHandler = new VerticalSequenceHandler(matrix, countLettersDna);
+		obliqueHandler = new ObliqueSequenceHandler(matrix, countLettersDna);
+	}
+	
 }

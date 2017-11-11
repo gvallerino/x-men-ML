@@ -28,15 +28,7 @@ public enum DnaEnum {
 
 	public static boolean belongsToDna(String otherDna) {
 		
-		List<DnaEnum> listDna = Arrays.asList(DnaEnum.values());
-		
-		for (DnaEnum dna : listDna) {
-			if (!dna.getTypeDna().equalsIgnoreCase(otherDna)) {
-				return false;
-			}
-		}
-		
-		return true;
+		return DnaEnum.valueOf(otherDna.toUpperCase()) != null;
 	}
 
 }

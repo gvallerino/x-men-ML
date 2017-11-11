@@ -36,9 +36,25 @@ public class XmenMlApplicationTests {
 	}
 	
 	@Test
+	public void testOneDnaIsNotCorrectShouldNotBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"ATGCGA","AAAACC","TTUTGT","AGAAGG","CCCCTA","TCACTG"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertFalse(isMutant);
+	}
+	
+	@Test
 	public void testTwoMatchsHorizontalSequenceShouldBeMutant() {
 		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
 		String[] dna = {"ATGCGA","AAAACC","TTATGT","AGAAGG","CCCCTA","TCACTG"};
+		boolean isMutant = dnaAnalyzer.isMutant(dna);
+		Assert.assertTrue(isMutant);
+	}
+	
+	@Test
+	public void testTwoMatchsVerticalSequenceShouldBeMutant() {
+		DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		String[] dna = {"ATGCGG","AATTCC","ATATGC","AGAAGC","CCCCTC","TCACTC"};
 		boolean isMutant = dnaAnalyzer.isMutant(dna);
 		Assert.assertTrue(isMutant);
 	}

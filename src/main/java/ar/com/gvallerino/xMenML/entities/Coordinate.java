@@ -10,6 +10,10 @@ public class Coordinate {
 		this.y = y;
 	}
 	
+	public boolean equals(Coordinate other) {
+		return x == other.getX() && y == other.getY();
+	}
+	
 	public int getX() {
 		return x;
 	}
