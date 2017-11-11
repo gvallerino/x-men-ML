@@ -5,12 +5,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.com.gvallerino.xMenML.entities.DnaAnalyzer;
+import ar.com.gvallerino.xMenML.service.impl.DnaAnalyzerServiceImpl;
 
 @RestController
 public class DnaAnalyzerController {
 	
-	DnaAnalyzer dnaAnalyzer = new DnaAnalyzer();
+	DnaAnalyzerServiceImpl dnaAnalyzer = new DnaAnalyzerServiceImpl();
 	
 	@RequestMapping("/mutant")
 	public void isMutant(HttpServletResponse response) {
