@@ -13,8 +13,9 @@ import ar.com.gvallerino.xMenML.entities.ObliqueRightSequenceHandler;
 import ar.com.gvallerino.xMenML.entities.VerticalSequenceHandler;
 import ar.com.gvallerino.xMenML.enums.DnaEnum;
 import ar.com.gvallerino.xMenML.interfaces.SequenceHandler;
+import ar.com.gvallerino.xMenML.service.DnaAnalyzerService;
 
-public class DnaAnalyzerServiceImpl {
+public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DnaAnalyzerServiceImpl.class);
 	
@@ -24,10 +25,10 @@ public class DnaAnalyzerServiceImpl {
 	List<SequenceHandler> listSequenceHandlers;
 	
 	public boolean isMutant(String[] dna) {
-		LOGGER.info("Starting task DNA Analyzer");
+//		LOGGER.info("Starting task DNA Analyzer");
 		
 		boolean mutantFound = false;
-		long time_start = System.currentTimeMillis();
+//		long time_start = System.currentTimeMillis();
 		matrix = this.loadMatrix(dna);
 		
 		if (isValidMatrix()) {
@@ -35,20 +36,24 @@ public class DnaAnalyzerServiceImpl {
 			mutantFound = searchMutant();
 		}
 		
-		long time_end = System.currentTimeMillis();
-		LOGGER.info("Completing task DNA Analyzer: " + ( time_end - time_start ) + " milliseconds");
+//		long time_end = System.currentTimeMillis();
+//		LOGGER.info("Completing task DNA Analyzer: " + ( time_end - time_start ) + " milliseconds");
 		return mutantFound;
 	}
 	
 	private char[][] loadMatrix(String[] dna) {
 		
-		longMatrix = dna.length;
-		char[][]matrix = new char[longMatrix][longMatrix];
+		char[][]matrix = null;
 		
-		for (int i = 0; i < longMatrix; i++) {
+		if (dna != null) {
+			longMatrix = dna.length;
+			matrix = new char[longMatrix][longMatrix];
 			
-			if (dna[i].length() != longMatrix) return null; //TODO: Lanzar excepcion
-			matrix[i] = dna[i].toCharArray();
+			for (int i = 0; i < longMatrix; i++) {
+				
+				if (dna[i].length() != longMatrix) return null; //TODO: Lanzar excepcion
+				matrix[i] = dna[i].toCharArray();
+			}
 		}
 		
 		return matrix;

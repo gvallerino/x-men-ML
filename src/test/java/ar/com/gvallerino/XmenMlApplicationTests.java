@@ -7,13 +7,14 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import ar.com.gvallerino.xMenML.service.DnaAnalyzerService;
 import ar.com.gvallerino.xMenML.service.impl.DnaAnalyzerServiceImpl;
 
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
 public class XmenMlApplicationTests {
 	
-	private DnaAnalyzerServiceImpl dnaAnalyzer;
+	private DnaAnalyzerService dnaAnalyzer;
 
 //	@Test
 	public void contextLoads() {
@@ -222,7 +223,7 @@ public class XmenMlApplicationTests {
 	}
 	
 	/***********************   Tests de mutantes con volumen de datos   ***********************/
-//	@Test
+	@Test
 	public void testVolumeData() {
 		long time_start = System.currentTimeMillis();
 		String[] dna = {"AAGCGA","CAATAC","TTGAGT","AGAGAG","CCGCTA","TCACTG"};
