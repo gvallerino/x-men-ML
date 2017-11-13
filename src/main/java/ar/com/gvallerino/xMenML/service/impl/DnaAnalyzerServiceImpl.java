@@ -1,10 +1,14 @@
 package ar.com.gvallerino.xMenML.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ar.com.gvallerino.xMenML.entities.Coordinate;
 import ar.com.gvallerino.xMenML.entities.HorizontalSequenceHandler;
+import ar.com.gvallerino.xMenML.entities.ObliqueLeftSequenceHandler;
 import ar.com.gvallerino.xMenML.entities.ObliqueRightSequenceHandler;
 import ar.com.gvallerino.xMenML.entities.VerticalSequenceHandler;
 import ar.com.gvallerino.xMenML.enums.DnaEnum;
@@ -16,11 +20,8 @@ public class DnaAnalyzerServiceImpl {
 	
 	private char[][] matrix;
 	private int longMatrix;
-	private int countLettersDna = 4;
-	
-	private SequenceHandler horizontalHandler;
-	private SequenceHandler verticalHandler;
-	private SequenceHandler obliqueRightHandler;
+	private static int COUNT_DNA_TO_MUTANT = 4;
+	List<SequenceHandler> listSequenceHandlers;
 	
 	public boolean isMutant(String[] dna) {
 		LOGGER.info("Starting task DNA Analyzer");
@@ -54,8 +55,7 @@ public class DnaAnalyzerServiceImpl {
 	}
 	
 	private boolean isValidMatrix() {
-		
-		return (matrix != null && longMatrix > countLettersDna);
+		return (matrix != null && longMatrix > COUNT_DNA_TO_MUTANT);
 	}
 	
 	private boolean searchMutant() {
@@ -71,19 +71,12 @@ public class DnaAnalyzerServiceImpl {
 					char dna = matrix[i][j];
 					DnaEnum.belongsToDna(Character.toString(dna));
 					
-					if (horizontalHandler.verifyCoordinates(coordinate) && horizontalHandler.isSequenceMutant(coordinate)) {
-						horizontalHandler.addCoordinatesWithoutMoving(coordinate);
-						countMutantFound++;
-					}
-					
-					if (verticalHandler.verifyCoordinates(coordinate) && verticalHandler.isSequenceMutant(coordinate)) {
-						verticalHandler.addCoordinatesWithoutMoving(coordinate);
-						countMutantFound++;
-					}
-					
-					if (obliqueRightHandler.verifyCoordinates(coordinate) && obliqueRightHandler.isSequenceMutant(coordinate)) {
-						obliqueRightHandler.addCoordinatesWithoutMoving(coordinate);
-						countMutantFound++;
+					for (SequenceHandler sequenceHandler : listSequenceHandlers) {
+						
+						if (sequenceHandler.verifyCoordinates(coordinate) && sequenceHandler.isSequenceMutant(coordinate)) {
+							sequenceHandler.addCoordinatesWithoutMoving(coordinate);
+							countMutantFound++;
+						}
 					}
 					
 					if (countMutantFound >= 2) {
@@ -101,9 +94,43 @@ public class DnaAnalyzerServiceImpl {
 	
 	private void initializeSequencesAnalyzer() {
 		
-		horizontalHandler = new HorizontalSequenceHandler(matrix, countLettersDna);
-		verticalHandler = new VerticalSequenceHandler(matrix, countLettersDna);
-		obliqueRightHandler = new ObliqueRightSequenceHandler(matrix, countLettersDna);
+		listSequenceHandlers = new ArrayList<>();
+		listSequenceHandlers.add(new HorizontalSequenceHandler(matrix, COUNT_DNA_TO_MUTANT));
+		listSequenceHandlers.add(new VerticalSequenceHandler(matrix, COUNT_DNA_TO_MUTANT));
+		listSequenceHandlers.add(new ObliqueRightSequenceHandler(matrix, COUNT_DNA_TO_MUTANT));
+		listSequenceHandlers.add(new ObliqueLeftSequenceHandler(matrix, COUNT_DNA_TO_MUTANT));
+		
 	}
+	
+	
+//	if (horizontalHandler.verifyCoordinates(coordinate) && horizontalHandler.isSequenceMutant(coordinate)) {
+//	horizontalHandler.addCoordinatesWithoutMoving(coordinate);
+//	countMutantFound++;
+//}
+//
+//if (verticalHandler.verifyCoordinates(coordinate) && verticalHandler.isSequenceMutant(coordinate)) {
+//	verticalHandler.addCoordinatesWithoutMoving(coordinate);
+//	countMutantFound++;
+//}
+//
+//if (obliqueRightHandler.verifyCoordinates(coordinate) && obliqueRightHandler.isSequenceMutant(coordinate)) {
+//	obliqueRightHandler.addCoordinatesWithoutMoving(coordinate);
+//	countMutantFound++;
+//}
+//
+//if (obliqueLeftHandler.verifyCoordinates(coordinate) && obliqueLeftHandler.isSequenceMutant(coordinate)) {
+//	obliqueLeftHandler.addCoordinatesWithoutMoving(coordinate);
+//	countMutantFound++;
+//}
+	
+//	horizontalHandler = new HorizontalSequenceHandler(matrix, countLettersDna);
+//	verticalHandler = new VerticalSequenceHandler(matrix, countLettersDna);
+//	obliqueRightHandler = new ObliqueRightSequenceHandler(matrix, countLettersDna);
+//	obliqueLeftHandler = new ObliqueLeftSequenceHandler(matrix, countLettersDna);
+	
+//	private SequenceHandler horizontalHandler;
+//	private SequenceHandler verticalHandler;
+//	private SequenceHandler obliqueRightHandler;
+//	private SequenceHandler obliqueLeftHandler;
 	
 }
