@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import ar.com.gvallerino.xMenML.entities.Coordinate;
 import ar.com.gvallerino.xMenML.entities.HorizontalSequenceHandler;
@@ -15,6 +16,7 @@ import ar.com.gvallerino.xMenML.enums.DnaEnum;
 import ar.com.gvallerino.xMenML.interfaces.SequenceHandler;
 import ar.com.gvallerino.xMenML.service.DnaAnalyzerService;
 
+@Service("dnaAnalyzerService")
 public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DnaAnalyzerServiceImpl.class);
