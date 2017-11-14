@@ -9,6 +9,4 @@ import ar.com.gvallerino.xMenML.entities.Dna;
 @Transactional
 public interface DnaDAO extends CrudRepository<Dna, Long>{
 
-//	public Dna findById(long id);
-	
 }

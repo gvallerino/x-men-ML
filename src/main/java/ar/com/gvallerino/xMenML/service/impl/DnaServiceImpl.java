@@ -24,4 +24,23 @@ public class DnaServiceImpl implements DnaService {
 		}
 	}
 
+	@Override
+	public long countMutant() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public long countDna() {
+		return dnaDAO.count();
+	}
+
+	public DnaDAO getDnaDAO() {
+		return dnaDAO;
+	}
+
+	public void setDnaDAO(DnaDAO dnaDAO) {
+		this.dnaDAO = dnaDAO;
+	}
+
 }

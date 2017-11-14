@@ -7,11 +7,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.gvallerino.xMenML.dto.DnaRequest;
+import ar.com.gvallerino.xMenML.dto.DnaStatsResponse;
 import ar.com.gvallerino.xMenML.entities.Dna;
 import ar.com.gvallerino.xMenML.service.DnaAnalyzerService;
 import ar.com.gvallerino.xMenML.service.DnaService;
@@ -49,6 +52,26 @@ public class DnaAnalyzerController {
 			
 			System.out.println("Error"); //Poner logger
 			saveDna(dna, isMutant);
+		}
+	}
+	
+	@GetMapping(value = "/stats", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DnaStatsResponse> stats() {
+		
+		try {
+			
+			long mutants = dnaService.countMutant();
+			long dnas = dnaService.countDna();
+			
+			long ratio = -1;
+			if (dnas != 0) {
+				ratio = mutants / dnas;
+			}		
+			return ResponseEntity.ok(new DnaStatsResponse(mutants, dnas, ratio));
+			
+		} catch (Exception e) {
+			//TODO: logger
+			return ResponseEntity.ok(new DnaStatsResponse(0, 0, -1));
 		}
 	}
 	

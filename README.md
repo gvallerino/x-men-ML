@@ -17,3 +17,7 @@
 
 #	0-	El servicio tiene en cuenta que en el código de ADN tenga información incorrecta (es decir, alguna 
 #		letra que no sea A, T, C o G). En dicho caso, el servicio retornará que el humano no es mutante.
+
+#  0- Si la cantidad de humanos llegase a ser 0, por lo que no podria ejecutarse la division, o existe algun
+#     error en la ejecucion del servicio stats, el resultado del mismo será 
+#      "{"count_mutant_dna":0,"count_human_dna":0,"ratio":-1}
