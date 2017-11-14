@@ -1,5 +1,7 @@
 package ar.com.gvallerino.xMenML.controller;
 
+import java.util.Arrays;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.com.gvallerino.xMenML.dao.DnaDAO;
 import ar.com.gvallerino.xMenML.dto.DnaRequest;
 import ar.com.gvallerino.xMenML.entities.Dna;
 import ar.com.gvallerino.xMenML.service.DnaAnalyzerService;
+import ar.com.gvallerino.xMenML.service.DnaService;
 
 @RestController
 public class DnaAnalyzerController {
@@ -22,18 +24,18 @@ public class DnaAnalyzerController {
 	private DnaAnalyzerService dnaAnalyzerService;
 	
 	@Autowired
-	private DnaDAO dnaDAO;
+	@Qualifier("dnaService")
+	private DnaService dnaService;
 	
 	@PostMapping(value = "/mutant", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void isMutant(@RequestBody DnaRequest dnaRequest, HttpServletResponse response) {
 		
+		String[] dna = null;
+		boolean isMutant = false;
+		
 		try {
-			
-			String[] dna = dnaRequest.getDna();
-			Dna dnaObjct = new Dna();
-			dnaObjct.setDnaData("a");
-			boolean isMutant = dnaAnalyzerService.isMutant(dna);
-			dnaObjct.setMutant(isMutant);
+			dna = dnaRequest.getDna();
+			isMutant = dnaAnalyzerService.isMutant(dna);
 			
 			if(isMutant) {
 				response.setStatus(HttpServletResponse.SC_OK);
@@ -41,9 +43,24 @@ public class DnaAnalyzerController {
 				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			}
 			
-			dnaDAO.save(dnaObjct);
-		} catch (Exception e) {
-			System.out.println("Error");
+			saveDna(dna, isMutant);
+		
+		} catch (Exception e) { //TODO: poner otra exception
+			
+			System.out.println("Error"); //Poner logger
+			saveDna(dna, isMutant);
+		}
+	}
+	
+	private void saveDna(String[] dna, boolean isMutant) {
+		try {
+			Dna dnaObject = new Dna();
+			dnaObject.setDnaData(Arrays.toString(dna));
+			dnaObject.setMutant(isMutant);
+			dnaService.saveDna(dnaObject);
+			
+		} catch (Exception e) { //TODO: Poner bien la excepcion
+			System.out.println("Poner logger"); //TODO: poner logger
 		}
 	}
 
@@ -55,12 +72,12 @@ public class DnaAnalyzerController {
 		this.dnaAnalyzerService = dnaAnalyzerService;
 	}
 
-	public DnaDAO getDnaDAO() {
-		return dnaDAO;
+	public DnaService getDnaService() {
+		return dnaService;
 	}
 
-	public void setDnaDAO(DnaDAO dnaDAO) {
-		this.dnaDAO = dnaDAO;
+	public void setDnaService(DnaService dnaService) {
+		this.dnaService = dnaService;
 	}
-
+	
 }
