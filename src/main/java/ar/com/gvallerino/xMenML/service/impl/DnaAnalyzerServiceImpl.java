@@ -55,7 +55,7 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 			
 			for (int i = 0; i < longMatrix; i++) {
 				
-				if (dna[i].length() != longMatrix) throw new DnaFormatException("La matriz de ADN no es cuadrada");
+				if (dna[i].length() != longMatrix) throw new DnaFormatException("El formato de la informacion de ADN es incorrecto");
 				matrix[i] = dna[i].toCharArray();
 			}
 		}
@@ -93,7 +93,7 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 					}
 					
 				} catch (IllegalArgumentException iae) {
-					String errorMessage = "Codigo DNA incorrecto";
+					String errorMessage = "Codigo ADN incorrecto";
 					LOGGER.error(errorMessage, iae);
 					throw new DnaCodeException(errorMessage);
 				}
