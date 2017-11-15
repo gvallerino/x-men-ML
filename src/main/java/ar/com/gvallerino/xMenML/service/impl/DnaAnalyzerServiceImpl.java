@@ -109,35 +109,4 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 		
 	}
 	
-	
-//	if (horizontalHandler.verifyCoordinates(coordinate) && horizontalHandler.isSequenceMutant(coordinate)) {
-//	horizontalHandler.addCoordinatesWithoutMoving(coordinate);
-//	countMutantFound++;
-//}
-//
-//if (verticalHandler.verifyCoordinates(coordinate) && verticalHandler.isSequenceMutant(coordinate)) {
-//	verticalHandler.addCoordinatesWithoutMoving(coordinate);
-//	countMutantFound++;
-//}
-//
-//if (obliqueRightHandler.verifyCoordinates(coordinate) && obliqueRightHandler.isSequenceMutant(coordinate)) {
-//	obliqueRightHandler.addCoordinatesWithoutMoving(coordinate);
-//	countMutantFound++;
-//}
-//
-//if (obliqueLeftHandler.verifyCoordinates(coordinate) && obliqueLeftHandler.isSequenceMutant(coordinate)) {
-//	obliqueLeftHandler.addCoordinatesWithoutMoving(coordinate);
-//	countMutantFound++;
-//}
-	
-//	horizontalHandler = new HorizontalSequenceHandler(matrix, countLettersDna);
-//	verticalHandler = new VerticalSequenceHandler(matrix, countLettersDna);
-//	obliqueRightHandler = new ObliqueRightSequenceHandler(matrix, countLettersDna);
-//	obliqueLeftHandler = new ObliqueLeftSequenceHandler(matrix, countLettersDna);
-	
-//	private SequenceHandler horizontalHandler;
-//	private SequenceHandler verticalHandler;
-//	private SequenceHandler obliqueRightHandler;
-//	private SequenceHandler obliqueLeftHandler;
-	
 }

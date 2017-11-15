@@ -1,10 +1,5 @@
 package ar.com.gvallerino.xMenML.enums;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-
 public enum DnaEnum {
 	
 	A("A"),
@@ -27,7 +22,6 @@ public enum DnaEnum {
 	}
 
 	public static boolean belongsToDna(String otherDna) {
-		
 		return DnaEnum.valueOf(otherDna.toUpperCase()) != null;
 	}
 

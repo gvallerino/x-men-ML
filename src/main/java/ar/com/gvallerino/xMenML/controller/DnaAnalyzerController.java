@@ -1,11 +1,16 @@
 package ar.com.gvallerino.xMenML.controller;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +26,8 @@ import ar.com.gvallerino.xMenML.service.DnaService;
 
 @RestController
 public class DnaAnalyzerController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(DnaAnalyzerController.class);
 	
 	@Autowired
 	@Qualifier("dnaAnalyzerService")
@@ -45,14 +52,12 @@ public class DnaAnalyzerController {
 			}else {
 				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			}
-			
-			saveDna(dna, isMutant);
-		
-		} catch (Exception e) { //TODO: poner otra exception
-			
-			System.out.println("Error"); //Poner logger
-			saveDna(dna, isMutant);
+		} catch (Exception e) {
+			LOGGER.error("Se produjo un error al realizar la validacion de mutante", e);
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		}
+
+		saveDna(dna, isMutant);
 	}
 	
 	@GetMapping(value = "/stats", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -62,16 +67,22 @@ public class DnaAnalyzerController {
 			
 			double mutants = dnaService.countMutant();
 			double dnas = dnaService.countDna();
+			double ratio = mutants / dnas;
 			
-			double ratio = -1;
-			if (dnas != 0) {
-				ratio = mutants / dnas;
-			}		
 			return ResponseEntity.ok(new DnaStatsResponse(mutants, dnas, ratio));
 			
+		} catch (SQLException sqle) {
+			LOGGER.error("Se produjo un error al realizar la conexion con la base de datos", sqle);
+//			return ResponseEntity.ok(new DnaStatsResponse(0, 0, -1));
+			return new ResponseEntity<DnaStatsResponse>(null,new HttpHeaders(),HttpStatus.FORBIDDEN);
+		} catch (ArithmeticException ae) {
+			LOGGER.error("Se produjo un error al realizar el calculo de ratio", ae);
+//			return ResponseEntity.ok(new DnaStatsResponse(0, 0, -1));
+			return new ResponseEntity<DnaStatsResponse>(null,new HttpHeaders(),HttpStatus.FORBIDDEN);
 		} catch (Exception e) {
-			//TODO: logger
-			return ResponseEntity.ok(new DnaStatsResponse(0, 0, -1));
+			LOGGER.error("Se produjo un error en el servicio", e);
+//			return ResponseEntity.ok(new DnaStatsResponse(0, 0, -1));
+			return new ResponseEntity<DnaStatsResponse>(null,new HttpHeaders(),HttpStatus.FORBIDDEN);
 		}
 	}
 	
@@ -82,8 +93,10 @@ public class DnaAnalyzerController {
 			dnaObject.setMutant(isMutant);
 			dnaService.saveDna(dnaObject);
 			
-		} catch (Exception e) { //TODO: Poner bien la excepcion
-			System.out.println("Poner logger"); //TODO: poner logger
+		} catch (SQLException sqle) {
+			LOGGER.error("Se produjo un error al querer almacenar el ADN", sqle);
+		} catch (Exception e) {
+			LOGGER.error("Se produjo un error en el servicio", e);
 		}
 	}
 
