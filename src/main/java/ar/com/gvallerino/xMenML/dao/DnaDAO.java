@@ -10,6 +10,6 @@ import ar.com.gvallerino.xMenML.entities.Dna;
 @Transactional
 public interface DnaDAO extends CrudRepository<Dna, Long>{
 
-	@Query("SELECT COUNT(*) FROM Dna u WHERE u.isMutant = 1")
+	@Query("SELECT COUNT(*) FROM Dna u WHERE u.isMutant = TRUE")
     long countMuntant();
 }
