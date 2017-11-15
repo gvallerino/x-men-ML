@@ -29,7 +29,6 @@ public class ObliqueRightSequenceHandler implements SequenceHandler {
 		for (int j = currentCoordinate.getY(); j < upperLimit; j++) {
 			
 			if (i+1 >= longMatrix || j+1 >= longMatrix) {
-				//TODO: Tirar excepcion 
 				return false;
 			}
 			

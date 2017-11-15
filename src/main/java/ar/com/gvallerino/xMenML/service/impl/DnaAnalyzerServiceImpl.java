@@ -13,6 +13,8 @@ import ar.com.gvallerino.xMenML.entities.ObliqueLeftSequenceHandler;
 import ar.com.gvallerino.xMenML.entities.ObliqueRightSequenceHandler;
 import ar.com.gvallerino.xMenML.entities.VerticalSequenceHandler;
 import ar.com.gvallerino.xMenML.enums.DnaEnum;
+import ar.com.gvallerino.xMenML.exceptions.DnaCodeException;
+import ar.com.gvallerino.xMenML.exceptions.DnaFormatException;
 import ar.com.gvallerino.xMenML.interfaces.SequenceHandler;
 import ar.com.gvallerino.xMenML.service.DnaAnalyzerService;
 
@@ -26,7 +28,7 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 	private static int COUNT_DNA_TO_MUTANT = 4;
 	List<SequenceHandler> listSequenceHandlers;
 	
-	public boolean isMutant(String[] dna) {
+	public boolean isMutant(String[] dna) throws DnaCodeException, DnaFormatException {
 //		LOGGER.info("Starting task DNA Analyzer");
 		
 		boolean mutantFound = false;
@@ -43,7 +45,7 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 		return mutantFound;
 	}
 	
-	private char[][] loadMatrix(String[] dna) {
+	private char[][] loadMatrix(String[] dna) throws DnaFormatException {
 		
 		char[][]matrix = null;
 		
@@ -53,7 +55,7 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 			
 			for (int i = 0; i < longMatrix; i++) {
 				
-				if (dna[i].length() != longMatrix) return null; //TODO: Lanzar excepcion
+				if (dna[i].length() != longMatrix) throw new DnaFormatException("La matriz de ADN no es cuadrada");
 				matrix[i] = dna[i].toCharArray();
 			}
 		}
@@ -65,7 +67,7 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 		return (matrix != null && longMatrix > COUNT_DNA_TO_MUTANT);
 	}
 	
-	private boolean searchMutant() {
+	private boolean searchMutant() throws DnaCodeException {
 		
 		int countMutantFound = 0;
 		
@@ -91,8 +93,9 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 					}
 					
 				} catch (IllegalArgumentException iae) {
-					LOGGER.error("Codigo DNA incorrecto", iae);
-					return false;
+					String errorMessage = "Codigo DNA incorrecto";
+					LOGGER.error(errorMessage, iae);
+					throw new DnaCodeException(errorMessage);
 				}
 			}
 		}

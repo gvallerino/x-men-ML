@@ -29,7 +29,6 @@ public class HorizontalSequenceHandler implements SequenceHandler {
 		for (int j = currentCoordinate.getY(); j < upperLimit; j++) {
 			
 			if (j+1 >= longMatrix) {
-				//TODO: Tirar excepcion 
 				return false;
 			}
 			

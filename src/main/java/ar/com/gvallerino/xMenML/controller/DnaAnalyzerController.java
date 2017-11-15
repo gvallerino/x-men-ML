@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ar.com.gvallerino.xMenML.dto.DnaRequest;
 import ar.com.gvallerino.xMenML.dto.DnaStatsResponse;
 import ar.com.gvallerino.xMenML.entities.Dna;
+import ar.com.gvallerino.xMenML.exceptions.DnaCodeException;
+import ar.com.gvallerino.xMenML.exceptions.DnaFormatException;
 import ar.com.gvallerino.xMenML.service.DnaAnalyzerService;
 import ar.com.gvallerino.xMenML.service.DnaService;
 
@@ -52,6 +54,12 @@ public class DnaAnalyzerController {
 			}else {
 				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			}
+		} catch (DnaCodeException dce) {
+			LOGGER.error(dce.getMessage(), dce);
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		} catch (DnaFormatException dfe) {
+			LOGGER.error(dfe.getMessage(), dfe);
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		} catch (Exception e) {
 			LOGGER.error("Se produjo un error al realizar la validacion de mutante", e);
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);

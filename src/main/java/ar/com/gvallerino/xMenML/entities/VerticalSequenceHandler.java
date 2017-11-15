@@ -29,7 +29,6 @@ public class VerticalSequenceHandler implements SequenceHandler{
 		for (int i = currentCoordinate.getX(); i < upperLimit; i++) {
 			
 			if (i+1 >= longMatrix) {
-				//TODO: Tirar excepcion
 				return false;
 			}
 			
