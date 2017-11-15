@@ -26,8 +26,7 @@ public class DnaServiceImpl implements DnaService {
 
 	@Override
 	public long countMutant() {
-		// TODO Auto-generated method stub
-		return 0;
+		return dnaDAO.countMuntant();
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "dna")
+//@Table(name = "dna")
 public class Dna {
 
 	@Id

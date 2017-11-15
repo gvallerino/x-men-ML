@@ -60,10 +60,10 @@ public class DnaAnalyzerController {
 		
 		try {
 			
-			long mutants = dnaService.countMutant();
-			long dnas = dnaService.countDna();
+			double mutants = dnaService.countMutant();
+			double dnas = dnaService.countDna();
 			
-			long ratio = -1;
+			double ratio = -1;
 			if (dnas != 0) {
 				ratio = mutants / dnas;
 			}		
