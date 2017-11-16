@@ -6,6 +6,9 @@ import java.util.List;
 import ar.com.gvallerino.xMenML.enums.DnaEnum;
 import ar.com.gvallerino.xMenML.interfaces.SequenceHandler;
 
+/**
+ * Clase que se encarga de manejar los matcheos de las secuencias oblicuas-derecha.
+ */
 public class ObliqueRightSequenceHandler implements SequenceHandler {
 	
 	private char[][] matrix;
@@ -20,6 +23,9 @@ public class ObliqueRightSequenceHandler implements SequenceHandler {
 	}
 
 
+	/**
+	 * Implementacion de isSequenceMutant para coordenadas oblicuas-derecha.
+	 */
 	@Override
 	public boolean isSequenceMutant(Coordinate currentCoordinate) {
 
@@ -48,7 +54,9 @@ public class ObliqueRightSequenceHandler implements SequenceHandler {
 		return true;
 	}
 
-
+	/**
+	 * Agrega la coordenada a la lista de coordenadas que no se deben verificar.
+	 */
 	@Override
 	public void addCoordinatesWithoutMoving(Coordinate currentCoordinate) {
 		
@@ -58,7 +66,9 @@ public class ObliqueRightSequenceHandler implements SequenceHandler {
 		}
 	}
 
-
+	/**
+	 * Se consulta si la coordenada debe ser verificada o no.
+	 */
 	@Override
 	public boolean verifyCoordinates(Coordinate currentCoordinate) {
 		

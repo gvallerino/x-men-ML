@@ -4,10 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
+/**
+ * Entidad que representa al ADN. 
+ */
 @Entity
-//@Table(name = "dna")
 public class Dna {
 
 	@Id

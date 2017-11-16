@@ -1,5 +1,8 @@
 package ar.com.gvallerino.xMenML.enums;
 
+/**
+ * Enum de letras que representan los ADNs validos.
+ */
 public enum DnaEnum {
 	
 	A("A"),
@@ -21,8 +24,12 @@ public enum DnaEnum {
 		this.typeDna = typeDna;
 	}
 
-	public static boolean belongsToDna(String otherDna) {
-		return DnaEnum.valueOf(otherDna.toUpperCase()) != null;
+	/**
+	 * Verifica si un ADN simple (Letra) corresponde con los ADNs validos.
+	 * @return boolean
+	 */
+	public static boolean belongsToDna(String dna) {
+		return DnaEnum.valueOf(dna.toUpperCase()) != null;
 	}
 
 }

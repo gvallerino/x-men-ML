@@ -4,9 +4,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.commons.dbcp.BasicDataSource;
+//import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Clase que se encarga de configurar la base de datos al levantar la API.
+ */
 @Configuration
 public class MainConfig {
 

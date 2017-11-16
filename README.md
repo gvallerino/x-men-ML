@@ -21,3 +21,5 @@
 #  0- Si la cantidad de humanos llegase a ser 0, por lo que no podria ejecutarse la division, o existe algun
 #     error en la ejecucion del servicio stats, el resultado del mismo será 
 #      "{"count_mutant_dna":0,"count_human_dna":0,"ratio":-1}
+
+Si el algoritmo detecta primero 2 matchs antes que una codigo de adn incorrecto (es decir que no sea A, T, C o G), se tomara como mutante valido

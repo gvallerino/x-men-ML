@@ -18,6 +18,10 @@ import ar.com.gvallerino.xMenML.exceptions.DnaFormatException;
 import ar.com.gvallerino.xMenML.interfaces.SequenceHandler;
 import ar.com.gvallerino.xMenML.service.DnaAnalyzerService;
 
+/**
+ * Servicio Analizador de ADN.
+ * Implementa DnaAnalyzerService.
+ */
 @Service("dnaAnalyzerService")
 public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 	
@@ -26,13 +30,18 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 	private char[][] matrix;
 	private int longMatrix;
 	private static int COUNT_DNA_TO_MUTANT = 4;
-	List<SequenceHandler> listSequenceHandlers;
+	private static int COUNT_MATCHS_TO_MUTANT = 2;
+	private List<SequenceHandler> listSequenceHandlers;
 	
+	/**
+	 * Verifica si un ADN es mutante o no.
+	 * @param dna
+	 * @return boolean.
+	 * @throws DnaCodeException, DnaFormatException
+	 */
 	public boolean isMutant(String[] dna) throws DnaCodeException, DnaFormatException {
-//		LOGGER.info("Starting task DNA Analyzer");
 		
 		boolean mutantFound = false;
-//		long time_start = System.currentTimeMillis();
 		matrix = this.loadMatrix(dna);
 		
 		if (isValidMatrix()) {
@@ -40,11 +49,16 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 			mutantFound = searchMutant();
 		}
 		
-//		long time_end = System.currentTimeMillis();
-//		LOGGER.info("Completing task DNA Analyzer: " + ( time_end - time_start ) + " milliseconds");
 		return mutantFound;
 	}
 	
+	/**
+	 * Carga en una matriz el ADN ingresado por parametro.
+	 * Verifica que la matriz sea cuadrada.
+	 * @param dna
+	 * @return matrix
+	 * @throws DnaFormatException
+	 */
 	private char[][] loadMatrix(String[] dna) throws DnaFormatException {
 		
 		char[][]matrix = null;
@@ -63,10 +77,19 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 		return matrix;
 	}
 	
+	/**
+	 * Verifica que en la matriz se puede matchear algun ADN mutante.
+	 * @return boolean
+	 */
 	private boolean isValidMatrix() {
 		return (matrix != null && longMatrix > COUNT_DNA_TO_MUTANT);
 	}
 	
+	/**
+	 * Busca ADN mutante, verificando que cada ADN simple sea valido.
+	 * @return boolean
+	 * @throws DnaCodeException
+	 */
 	private boolean searchMutant() throws DnaCodeException {
 		
 		int countMutantFound = 0;
@@ -88,7 +111,7 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 						}
 					}
 					
-					if (countMutantFound >= 2) {
+					if (countMutantFound >= COUNT_MATCHS_TO_MUTANT) {
 						return true;
 					}
 					
@@ -102,6 +125,9 @@ public class DnaAnalyzerServiceImpl implements DnaAnalyzerService {
 		return false;
 	}
 	
+	/**
+	 * Inicializa todos los sequenceHandlers
+	 */
 	private void initializeSequencesAnalyzer() {
 		
 		listSequenceHandlers = new ArrayList<>();

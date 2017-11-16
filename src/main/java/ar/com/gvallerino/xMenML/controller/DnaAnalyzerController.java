@@ -24,8 +24,14 @@ import ar.com.gvallerino.xMenML.entities.Dna;
 import ar.com.gvallerino.xMenML.exceptions.DnaCodeException;
 import ar.com.gvallerino.xMenML.exceptions.DnaFormatException;
 import ar.com.gvallerino.xMenML.service.DnaAnalyzerService;
+import ar.com.gvallerino.xMenML.service.DnaCacheManagerService;
 import ar.com.gvallerino.xMenML.service.DnaService;
 
+/**
+ * Clase que expone los servicios REST de la API para conocer si un humano es mutante 
+ * dependiendo de su ADN y una estadistica de los mismos.
+ * 
+ */
 @RestController
 public class DnaAnalyzerController {
 	
@@ -39,6 +45,17 @@ public class DnaAnalyzerController {
 	@Qualifier("dnaService")
 	private DnaService dnaService;
 	
+	@Autowired
+	private DnaCacheManagerService dnaCacheManagerService;
+	
+	/**
+	 * Servicio que indica si un humano es mutante devolviendo un HTTP 200-OK o 403-Forbidden en caso contrario.
+	 * Registra el ADN analizado.
+	 * 
+	 * @param dnaRequest: ADN a analizar
+	 * @param response
+	 * @return HTTP 200-OK, HTTP 403-Forbidden in @param response
+	 */
 	@PostMapping(value = "/mutant", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void isMutant(@RequestBody DnaRequest dnaRequest, HttpServletResponse response) {
 		
@@ -48,12 +65,10 @@ public class DnaAnalyzerController {
 		try {
 			dna = dnaRequest.getDna();
 			isMutant = dnaAnalyzerService.isMutant(dna);
+			int status = (isMutant ? HttpServletResponse.SC_OK : HttpServletResponse.SC_FORBIDDEN);
+			response.setStatus(status);
+			saveDna(dna, isMutant);
 			
-			if(isMutant) {
-				response.setStatus(HttpServletResponse.SC_OK);
-			}else {
-				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-			}
 		} catch (DnaCodeException dce) {
 			LOGGER.error(dce.getMessage(), dce);
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -64,15 +79,18 @@ public class DnaAnalyzerController {
 			LOGGER.error("Se produjo un error al realizar la validacion de mutante", e);
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 		}
-
-		saveDna(dna, isMutant);
 	}
 	
+	/**
+	 * Servicio que devuelve una estadistica de los ADNs registrados.
+	 * @return ResponseEntity
+	 */
 	@GetMapping(value = "/stats", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<DnaStatsResponse> stats() {
 		
 		try {
 			
+			dnaCacheManagerService.updateRegisteredDna();
 			double mutants = dnaService.countMutant();
 			double dnas = dnaService.countDna();
 			double ratio = mutants / dnas;
@@ -81,28 +99,26 @@ public class DnaAnalyzerController {
 			
 		} catch (SQLException sqle) {
 			LOGGER.error("Se produjo un error al realizar la conexion con la base de datos", sqle);
-//			return ResponseEntity.ok(new DnaStatsResponse(0, 0, -1));
-			return new ResponseEntity<DnaStatsResponse>(null,new HttpHeaders(),HttpStatus.FORBIDDEN);
 		} catch (ArithmeticException ae) {
 			LOGGER.error("Se produjo un error al realizar el calculo de ratio", ae);
-//			return ResponseEntity.ok(new DnaStatsResponse(0, 0, -1));
-			return new ResponseEntity<DnaStatsResponse>(null,new HttpHeaders(),HttpStatus.FORBIDDEN);
 		} catch (Exception e) {
 			LOGGER.error("Se produjo un error en el servicio", e);
-//			return ResponseEntity.ok(new DnaStatsResponse(0, 0, -1));
-			return new ResponseEntity<DnaStatsResponse>(null,new HttpHeaders(),HttpStatus.FORBIDDEN);
 		}
+		return new ResponseEntity<DnaStatsResponse>(null,new HttpHeaders(),HttpStatus.FORBIDDEN);
 	}
 	
+	/**
+	 * Método que se encarga de crear un objeto Dna para posteriormente almacenarlo
+	 * a traves del servicio correspondiente.
+	 * @param dna
+	 * @param isMutant
+	 */
 	private void saveDna(String[] dna, boolean isMutant) {
 		try {
 			Dna dnaObject = new Dna();
 			dnaObject.setDnaData(Arrays.toString(dna));
 			dnaObject.setMutant(isMutant);
-			dnaService.saveDna(dnaObject);
-			
-		} catch (SQLException sqle) {
-			LOGGER.error("Se produjo un error al querer almacenar el ADN", sqle);
+			dnaCacheManagerService.save(dnaObject);
 		} catch (Exception e) {
 			LOGGER.error("Se produjo un error en el servicio", e);
 		}
@@ -123,5 +139,14 @@ public class DnaAnalyzerController {
 	public void setDnaService(DnaService dnaService) {
 		this.dnaService = dnaService;
 	}
+
+	public DnaCacheManagerService getDnaCacheManagerService() {
+		return dnaCacheManagerService;
+	}
+
+	public void setDnaCacheManagerService(DnaCacheManagerService dnaCacheManagerService) {
+		this.dnaCacheManagerService = dnaCacheManagerService;
+	}
+	
 	
 }

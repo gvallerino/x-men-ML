@@ -1,11 +1,20 @@
 package ar.com.gvallerino.xMenML.dto;
 
+/**
+ * Clase que representa el response del servicio 'stats' de la API.
+ */
 public class DnaStatsResponse {
 	
+	/** Cantidad de mutantes */
 	private double count_mutant_dna;
+	
+	/** Cantidad de humanos */
 	private double count_human_dna;
+	
+	/** Proporcion mutantes / humanos */
 	private double ratio;
 	
+	/** Constructor */
 	public DnaStatsResponse (double mutant, double dna, double ratio) {
 		this.count_mutant_dna = mutant;
 		this.count_human_dna = dna;

@@ -1,5 +1,8 @@
 package ar.com.gvallerino;
 
+import java.sql.SQLException;
+import java.util.Arrays;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,15 +10,19 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import ar.com.gvallerino.xMenML.entities.Dna;
 import ar.com.gvallerino.xMenML.exceptions.DnaCodeException;
 import ar.com.gvallerino.xMenML.service.DnaAnalyzerService;
+import ar.com.gvallerino.xMenML.service.DnaService;
 import ar.com.gvallerino.xMenML.service.impl.DnaAnalyzerServiceImpl;
+import ar.com.gvallerino.xMenML.service.impl.DnaServiceImpl;
 
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
 public class XmenMlApplicationTests {
 	
 	private DnaAnalyzerService dnaAnalyzer;
+	private DnaService dnaService;
 
 //	@Test
 	public void contextLoads() {
@@ -25,12 +32,17 @@ public class XmenMlApplicationTests {
 	@Before
 	public void initialize() {
 		dnaAnalyzer = new DnaAnalyzerServiceImpl();
+		dnaService = new DnaServiceImpl();
 	}
 	
 	private boolean isMutant(String[] dna) {
 		boolean isMutant = false;
 		try {
 			isMutant = dnaAnalyzer.isMutant(dna);
+			Dna dnaObject = new Dna();
+			dnaObject.setDnaData(Arrays.toString(dna));
+			dnaObject.setMutant(isMutant);
+//			dnaService.saveDna(dnaObject);
 		} catch (Exception e) {
 			isMutant = false;
 		}
@@ -211,8 +223,8 @@ public class XmenMlApplicationTests {
 	public void testVolumeData() {
 		long time_start = System.currentTimeMillis();
 		String[] dna = {"AAGCGA","CAATAC","TTGAGT","AGAGAG","CCGCTA","TCACTG"};
-		boolean isMutant = false;
-		for (int i = 0; i < 1000000; i++) {
+		boolean isMutant = true;
+		for (int i = 0; i < 10000000; i++) {
 			isMutant = isMutant(dna);
 		}
 		long time_end = System.currentTimeMillis();
@@ -220,3 +232,14 @@ public class XmenMlApplicationTests {
 		Assert.assertTrue(isMutant);
 	}
 }
+
+
+//Dna dnaObject = new Dna();
+//dnaObject.setDnaData(Arrays.toString(dna));
+//dnaObject.setMutant(true);
+//try {
+//	dnaService.saveDna(dnaObject);
+//} catch (SQLException e) {
+//	// TODO Auto-generated catch block
+//	e.printStackTrace();
+//}

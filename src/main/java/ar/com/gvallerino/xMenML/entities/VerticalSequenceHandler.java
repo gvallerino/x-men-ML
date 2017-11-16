@@ -6,6 +6,9 @@ import java.util.List;
 import ar.com.gvallerino.xMenML.enums.DnaEnum;
 import ar.com.gvallerino.xMenML.interfaces.SequenceHandler;
 
+/**
+ * Clase que se encarga de manejar los matcheos de las secuencias verticales.
+ */
 public class VerticalSequenceHandler implements SequenceHandler{
 	
 	private char[][] matrix;
@@ -20,6 +23,9 @@ public class VerticalSequenceHandler implements SequenceHandler{
 		this.longMatrix = matrix.length;
 	}
 
+	/**
+	 * Implementacion de isSequenceMutant para coordenadas verticales.
+	 */
 	@Override
 	public boolean isSequenceMutant(Coordinate currentCoordinate) {
 		
@@ -47,6 +53,10 @@ public class VerticalSequenceHandler implements SequenceHandler{
 		return true;
 	}
 	
+	/**
+	 * Agrega la coordenada a la lista de coordenadas que no se deben verificar.
+	 */
+	@Override
 	public void addCoordinatesWithoutMoving(Coordinate currentCoordinate) {
 		
 		for (int i = 1; i < countLettersDna; i++) {
@@ -55,6 +65,10 @@ public class VerticalSequenceHandler implements SequenceHandler{
 		}
 	}
 	
+	/**
+	 * Se consulta si la coordenada debe ser verificada o no.
+	 */
+	@Override
 	public boolean verifyCoordinates(Coordinate currentCoordinate) {
 		
 		if (coordinatesWithoutMoving != null && !coordinatesWithoutMoving.isEmpty()) {

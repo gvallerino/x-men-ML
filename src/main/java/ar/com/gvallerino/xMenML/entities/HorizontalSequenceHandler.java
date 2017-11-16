@@ -6,6 +6,9 @@ import java.util.List;
 import ar.com.gvallerino.xMenML.enums.DnaEnum;
 import ar.com.gvallerino.xMenML.interfaces.SequenceHandler;
 
+/**
+ * Clase que se encarga de manejar los matcheos de las secuencias horizontales.
+ */
 public class HorizontalSequenceHandler implements SequenceHandler {
 	
 	private char[][] matrix;
@@ -13,6 +16,7 @@ public class HorizontalSequenceHandler implements SequenceHandler {
 	private int longMatrix;
 	private List<Coordinate> coordinatesWithoutMoving = new ArrayList<>();
 	
+	/** Constructor */
 	public HorizontalSequenceHandler(char[][] matrix, int countLettersDna) {
 		
 		this.matrix = matrix;
@@ -20,6 +24,9 @@ public class HorizontalSequenceHandler implements SequenceHandler {
 		this.longMatrix = matrix.length;
 	}
 	
+	/**
+	 * Implementacion de isSequenceMutant para coordenadas horizontales.
+	 */
 	@Override
 	public boolean isSequenceMutant(Coordinate currentCoordinate) {
 		
@@ -47,6 +54,9 @@ public class HorizontalSequenceHandler implements SequenceHandler {
 		return true;
 	}
 
+	/**
+	 * Agrega la coordenada a la lista de coordenadas que no se deben verificar.
+	 */
 	@Override
 	public void addCoordinatesWithoutMoving(Coordinate currentCoordinate) {
 		
@@ -56,6 +66,9 @@ public class HorizontalSequenceHandler implements SequenceHandler {
 		}
 	}
 
+	/**
+	 * Se consulta si la coordenada debe ser verificada o no.
+	 */
 	@Override
 	public boolean verifyCoordinates(Coordinate currentCoordinate) {
 
