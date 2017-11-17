@@ -9,7 +9,7 @@ public interface DnaCacheManagerService {
 
 	public void save(Dna dna);
 	
-	public void updateRegisteredDna();
+	public void persistAllDnas();
 	
 	public boolean isEmpty();
 }

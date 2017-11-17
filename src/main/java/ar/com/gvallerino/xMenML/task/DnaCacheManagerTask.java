@@ -24,12 +24,12 @@ public class DnaCacheManagerTask {
 	 * @throws InterruptedException
 	 */
 	@Scheduled(fixedRate = 60000)
-    public void saveDnasInCache() throws InterruptedException {
+    public void saveDnas() {
 		LOGGER.info("DnaCacheManagerTask | Inicializando tarea");
 		
 		if (!dnaCacheManagerService.isEmpty()) {
-			dnaCacheManagerService.updateRegisteredDna();
-			LOGGER.info("DnaCacheManagerTask | Guardando ADNs en Base de Datos");
+			dnaCacheManagerService.persistAllDnas();
+			LOGGER.info("DnaCacheManagerTask | Almacenando en Base de Datos");
 		}
 		LOGGER.info("DnaCacheManagerTask | Finalizando tarea");
     }

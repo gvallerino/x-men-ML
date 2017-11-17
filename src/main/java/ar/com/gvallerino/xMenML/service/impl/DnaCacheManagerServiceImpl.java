@@ -45,7 +45,7 @@ public class DnaCacheManagerServiceImpl implements DnaCacheManagerService {
 	 * Actualiza los ADNs que se encuentran en cache y los persiste en la base de datos.
 	 * Limpia la cache.
 	 */
-	public void updateRegisteredDna() {
+	public void persistAllDnas() {
 		
 		Iterator<Entry<Long, Dna>> it = myCache.iterator();
 		while (it.hasNext()) {
@@ -54,7 +54,6 @@ public class DnaCacheManagerServiceImpl implements DnaCacheManagerService {
 			Dna dna = mapDna.getValue();
 			
 			try {
-				LOGGER.error("Guardando en base de datos el ADN: " + key);
 				dnaDAO.save(dna);
 				myCache.remove(key);
 			} catch (Exception e) {

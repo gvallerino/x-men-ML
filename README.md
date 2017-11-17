@@ -1,25 +1,24 @@
-# x-men-ML
+## x-men-ML
 
-#Hipótesis
+#Hipótesis y supuestos
 
-#  0- Siguiendo lo que indica el enunciado, una matriz debe ser obligatoriamente cuadrada para 
-# 		verificar si el humano es mutante o no.
+1- Siguiendo lo que indica el enunciado, una matriz debe ser obligatoriamente cuadrada para verificar si el humano es mutante o no.
 
-#  0- Si la matriz tuviese información incompleta, el servicio va a devolver que el humano no es mutante, 
-#		debido a que la firma del método isMutant del enunciado no permite
-#		devolver una excepción.
+2- Cualquier request incorrecto que se envíe a la API, en el servicio mutant, la misma devolverá 403-Forbidden.
+	Posibles casos de requests incorrectos:
+		- Código de ADN que tenga información incorrecta (es decir, alguna letra que no sea A, T, C o G).
+		- Matriz no cuadrada.
+	
+3- Se tomó como criterio que si un código de ADN tiene una letra incorrecta, pero primero se encuentran dos matcheos de mutantes,
+la API devolverá que el humano es mutante, ignorando el codigo ADN incorrecto.
 
-#  1- Si existe un código de 5 letras iguales correlativas se tiene en cuenta como una sola secuencia 
-#		de cuatro letras, y no dos secuencias.
+4- En el enunciado menciona que una posible dirección de ADN para ser mutante es la oblicua. Se toma como decisión que existen dos tipos de direcciones oblicuas: Oblicua Izquierda y oblicua derecha.
 
-#	2- Si se da el caso de 8 letras iguales correlativas, se toma como criterio la existencia de dos 
-#		secuencias, debido a que son dos grupos de 4 letras iguales.
 
-#	0-	El servicio tiene en cuenta que en el código de ADN tenga información incorrecta (es decir, alguna 
-#		letra que no sea A, T, C o G). En dicho caso, el servicio retornará que el humano no es mutante.
+5- Si existe un código de 5 letras iguales correlativas se tiene en cuenta como una sola secuencia de cuatro letras, y no dos secuencias.
 
-#  0- Si la cantidad de humanos llegase a ser 0, por lo que no podria ejecutarse la division, o existe algun
-#     error en la ejecucion del servicio stats, el resultado del mismo será 
-#      "{"count_mutant_dna":0,"count_human_dna":0,"ratio":-1}
+6- Si se da el caso de 8 letras iguales correlativas, se toma como criterio la existencia de dos secuencias, debido a que son dos grupos de 4 letras iguales.
 
-Si el algoritmo detecta primero 2 matchs antes que una codigo de adn incorrecto (es decir que no sea A, T, C o G), se tomara como mutante valido
+7- En el servicio stats, si la cantidad de humanos llegase a ser 0 o existe algún error en la ejecucion del mismo, el resultado  será: {"count_mutant_dna":0.0,"count_human_dna":0.0,"ratio":"NaN"}
+
+8- Si en la API se ingresa un request incorrecto (ver punto 2) o se produce algún error de aplicación, dicho ADN no se tendrá en cuenta para la estadística.

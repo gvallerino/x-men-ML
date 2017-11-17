@@ -90,7 +90,7 @@ public class DnaAnalyzerController {
 		
 		try {
 			
-			dnaCacheManagerService.updateRegisteredDna();
+			dnaCacheManagerService.persistAllDnas();
 			double mutants = dnaService.countMutant();
 			double dnas = dnaService.countDna();
 			double ratio = mutants / dnas;
