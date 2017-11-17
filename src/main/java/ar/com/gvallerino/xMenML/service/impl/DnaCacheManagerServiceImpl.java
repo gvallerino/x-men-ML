@@ -54,11 +54,13 @@ public class DnaCacheManagerServiceImpl implements DnaCacheManagerService {
 			Dna dna = mapDna.getValue();
 			
 			try {
+				LOGGER.error("Guardando en cache el ADN: " + key);
 				dnaDAO.save(dna);
 				myCache.remove(key);
 			} catch (Exception e) {
 				LOGGER.error("No se pudo almacenar en la base de datos el ADN " + dna.getId());
 			}
+			LOGGER.error("Limpiando cache");
 			idDna = 0L;
 		}
 	}
