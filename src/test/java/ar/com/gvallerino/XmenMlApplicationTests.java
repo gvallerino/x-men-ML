@@ -8,26 +8,15 @@ import org.junit.Test;
 
 import ar.com.gvallerino.xMenML.entities.Dna;
 import ar.com.gvallerino.xMenML.service.DnaAnalyzerService;
-import ar.com.gvallerino.xMenML.service.DnaService;
 import ar.com.gvallerino.xMenML.service.impl.DnaAnalyzerServiceImpl;
-import ar.com.gvallerino.xMenML.service.impl.DnaServiceImpl;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
 public class XmenMlApplicationTests {
 	
 	private DnaAnalyzerService dnaAnalyzer;
-	private DnaService dnaService;
-
-//	@Test
-	public void contextLoads() {
-		
-	}
 	
 	@Before
 	public void initialize() {
 		dnaAnalyzer = new DnaAnalyzerServiceImpl();
-		dnaService = new DnaServiceImpl();
 	}
 	
 	private boolean isMutant(String[] dna) {
@@ -37,7 +26,6 @@ public class XmenMlApplicationTests {
 			Dna dnaObject = new Dna();
 			dnaObject.setDnaData(Arrays.toString(dna));
 			dnaObject.setMutant(isMutant);
-//			dnaService.saveDna(dnaObject);
 		} catch (Exception e) {
 			isMutant = false;
 		}
@@ -227,14 +215,3 @@ public class XmenMlApplicationTests {
 		Assert.assertTrue(isMutant);
 	}
 }
-
-
-//Dna dnaObject = new Dna();
-//dnaObject.setDnaData(Arrays.toString(dna));
-//dnaObject.setMutant(true);
-//try {
-//	dnaService.saveDna(dnaObject);
-//} catch (SQLException e) {
-//	// TODO Auto-generated catch block
-//	e.printStackTrace();
-//}

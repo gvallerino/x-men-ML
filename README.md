@@ -1,6 +1,12 @@
 ## x-men-ML
 
-#Hipótesis y supuestos
+# Objetivo
+
+Crear un programa con un método o función con la siguiente firma "boolean isMutant(String[] dna);" en donde se recibirá como parámetro un array de Strings que representan cada fila de una tabla de (NxN) con la secuencia del ADN.
+Un humano es mutante si se encuentra más de una secuencia de cuatro letras iguales, de forma oblicua, horizontal o vertical.
+
+
+# Hipótesis y supuestos
 
 1- Siguiendo lo que indica el enunciado, una matriz debe ser obligatoriamente cuadrada para verificar si el humano es mutante o no.
 
