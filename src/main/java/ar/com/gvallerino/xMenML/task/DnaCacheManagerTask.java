@@ -23,14 +23,15 @@ public class DnaCacheManagerTask {
 	 * Tarea que almacena en la base de datos todos los ADNs guardados en cache.
 	 * @throws InterruptedException
 	 */
-	@Scheduled(fixedRate = 30000)
+	@Scheduled(fixedRate = 60000)
     public void saveDnasInCache() throws InterruptedException {
-		LOGGER.info("Inicializando task | Guardando ADNs en Cache");
+		LOGGER.info("DnaCacheManagerTask | Inicializando tarea");
 		
 		if (!dnaCacheManagerService.isEmpty()) {
 			dnaCacheManagerService.updateRegisteredDna();
+			LOGGER.info("DnaCacheManagerTask | Guardando ADNs en Base de Datos");
 		}
-		LOGGER.info("Finalizando task | Guardando ADNs en Cache");
+		LOGGER.info("DnaCacheManagerTask | Finalizando tarea");
     }
 
 	public DnaCacheManagerService getDnaCacheManagerService() {
